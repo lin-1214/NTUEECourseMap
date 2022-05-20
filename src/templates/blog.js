@@ -5,8 +5,10 @@ import useBlogData from "../static_queries/useBlogData"
 import * as blogTemplateStyles from "../styles/templates/blog.module.scss"
 import ReactMarkdown from "react-markdown"
 
+const type = ["第一類", "第二類", "第三類"]
+
 const MarkdownComponents = {
-  p: paragraph => {
+  p: (paragraph) => {
     const { node } = paragraph
 
     if (node.children[0].tagName === "img") {
@@ -33,7 +35,7 @@ export default function Blog(props) {
   const nextSlug = getNextSlug(data.id)
 
   function getNextSlug(slug) {
-    const allSlugs = allBlogData.map(blog => {
+    const allSlugs = allBlogData.map((blog) => {
       return blog.node.id
     })
     const nextSlug = allSlugs[allSlugs.indexOf(slug) + 1]
@@ -49,7 +51,17 @@ export default function Blog(props) {
       <article className={blogTemplateStyles.blog}>
         <div className={blogTemplateStyles.blog__info}>
           <h1>{data.frontmatter.title}</h1>
-          <h3>{data.frontmatter.Date}</h3>
+          <h3>
+            授課教授：
+            <a href="https://web.ee.ntu.edu.tw/teacher_index_all.php">
+              {data.frontmatter.Instructor}
+            </a>
+          </h3>
+          <h3>Semester：{data.frontmatter.Semester}</h3>
+          <h3>Credit：{data.frontmatter.Credits}</h3>
+          <h3>加簽方式：第{data.frontmatter.SelectionMethod}類</h3>
+          <h3>課程類別：{data.frontmatter.CourseType}</h3>
+          <h3>開課系所：{data.frontmatter.Department}</h3>
         </div>
         <ReactMarkdown
           className={blogTemplateStyles.blog__body}
@@ -82,12 +94,18 @@ export default function Blog(props) {
 //dynamic page query, must occur within each post context
 //$slug is made available by context from createPages call in gatsby-node.js
 export const getPostData = graphql`
-  query($slug: String!) {
+  query ($slug: String!) {
     markdownRemark(id: { eq: $slug }) {
       frontmatter {
         title
         Author
         Date(formatString: "MMMM Do, YYYY")
+        Semester
+        Instructor
+        Credits
+        SelectionMethod
+        CourseType
+        Department
       }
       rawMarkdownBody
     }

@@ -11,7 +11,14 @@ export default function useBlogData() {
               Date(formatString: "MMMM Do, YYYY")
               Author
               title
+              Semester
+              Instructor
+              Credits
+              SelectionMethod
+              CourseType
+              Department
             }
+            excerpt
             rawMarkdownBody
           }
         }
